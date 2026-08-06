@@ -1,0 +1,41 @@
+# Runtime container data
+config/**
+
+# Keep the folder structure
+!config/
+!config/.gitkeep
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Certificates
+*.pem
+*.key
+*.crt
+
+# Backups
+backups/
+
+# Temporary files
+*.tmp
+*.bak
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# VS Code
+.vscode/
+
+# GitHub
+.github/*.env

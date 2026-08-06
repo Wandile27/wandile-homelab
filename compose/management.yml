@@ -1,0 +1,38 @@
+services:
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      TZ: ${TZ}
+
+    volumes:
+      - ${HOMELAB}/config/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    networks:
+      - homelab
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+
+    ports:
+      - "9000:9000"
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOMELAB}/config/portainer:/data
+
+    networks:
+      - homelab
+
+networks:
+  homelab:
+    external: true
