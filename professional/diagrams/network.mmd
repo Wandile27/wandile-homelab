@@ -1,0 +1,8 @@
+flowchart LR
+Internet --> Router --> LAN
+LAN --> G500["G500 Server"]
+LAN --> Clients["PC / phone / TV"]
+G500 --> Docker["Docker networks"]
+G500 --> SSH
+G500 --> Tailscale
+Tailscale --> Remote["Remote devices"]

@@ -1,0 +1,10 @@
+flowchart TB
+SSD["SSD / Ubuntu / Docker"] --> Apps["Application data"]
+HDD["Local bulk storage"] --> Media["Movies / Music / TV"]
+ADATA["ADATA HDD"] --> Archive["Historical/source media"]
+Image["Nextcloud storage.img"] --> LUKS["LUKS2"]
+LUKS --> Mapper["/dev/mapper/nextcloud-secure"]
+Mapper --> EXT4["ext4"]
+EXT4 --> Restore["/mnt/nextcloud-restore"]
+Apps --> Backup["Backup"]
+Media --> Backup

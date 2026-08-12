@@ -1,0 +1,12 @@
+flowchart TB
+Internet --> Router --> LAN --> G500["Lenovo G500 / Ubuntu Server"]
+G500 --> Docker
+G500 --> Tailscale
+G500 --> Storage
+Docker --> Cloud["Nextcloud + PostgreSQL + Redis"]
+Docker --> Media["Jellyfin + Navidrome + Media Stack"]
+Docker --> Management["Portainer + Uptime Kuma"]
+Storage --> SSD["SSD / applications"]
+Storage --> HDD["Bulk storage / backups"]
+Storage --> ADATA["ADATA archive"]
+Tailscale --> Remote["Remote clients"]
