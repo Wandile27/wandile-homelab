@@ -39,3 +39,6 @@ backups/
 
 # GitHub
 .github/*.env
+
+# Application environment files / secrets
+env/*.env

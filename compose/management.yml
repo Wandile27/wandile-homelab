@@ -9,11 +9,28 @@ services:
       - "3000:3000"
 
     environment:
-      TZ: ${TZ}
+      TZ: Africa/Johannesburg
+      HOMEPAGE_ALLOWED_HOSTS: "localhost:3000,g500:3000,192.168.0.248:3000,100.70.229.32:3000"
 
     volumes:
-      - ${HOMELAB}/config/homepage:/app/config
+      - /home/wandile/homelab/config/homepage:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    networks:
+      - homelab
+
+  files:
+    image: appflowyinc/files:latest
+    container_name: files
+    restart: unless-stopped
+
+    ports:
+      - "8082:8080"
+
+    volumes:
+      - /mnt/storage:/data/storage
+      - /home/wandile/Thehdd:/data/thehdd
+      - /home/wandile/homelab:/data/homelab
 
     networks:
       - homelab
@@ -28,7 +45,7 @@ services:
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${HOMELAB}/config/portainer:/data
+      - /home/wandile/homelab/config/portainer:/data
 
     networks:
       - homelab

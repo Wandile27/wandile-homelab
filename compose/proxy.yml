@@ -1,0 +1,23 @@
+services:
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+
+    restart: unless-stopped
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - /home/wandile/homelab/config/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /home/wandile/homelab/config/caddy/data:/data
+      - /home/wandile/homelab/config/caddy/config:/config 
+
+    networks:
+      - homelab
+
+networks:
+  homelab:
+    external: true

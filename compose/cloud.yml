@@ -1,0 +1,93 @@
+services:
+
+  postgres:
+    image: postgres:17
+    container_name: cloud-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    volumes:
+      - cloud_postgres:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - homelab
+
+  redis:
+    image: redis:8-alpine
+    container_name: cloud-redis
+    restart: unless-stopped
+
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+
+    volumes:
+      - cloud_redis:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "PING"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - homelab
+
+  nextcloud:
+    build:
+      context: ../docker/nextcloud
+      dockerfile: Dockerfile
+    image: wandile-nextcloud:latest
+    container_name: cloud-nextcloud
+    restart: unless-stopped
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    expose:
+      - "80"
+
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      REDIS_HOST: redis
+      REDIS_HOST_PASSWORD: ${REDIS_PASSWORD}
+
+      NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USER}
+      NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
+
+      TZ: ${TZ}
+
+    volumes:
+      - cloud_nextcloud:/var/www/html
+
+    networks:
+      - homelab
+
+volumes:
+  cloud_postgres:
+    name: cloud_postgres
+
+  cloud_redis:
+    name: cloud_redis
+
+  cloud_nextcloud:
+    name: cloud_nextcloud
+
+networks:
+  homelab:
+    external: true

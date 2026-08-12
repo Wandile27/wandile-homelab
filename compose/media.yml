@@ -1,0 +1,44 @@
+services:
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+
+    networks:
+      - homelab
+
+    ports:
+      - "8096:8096"
+
+    environment:
+      TZ: Africa/Johannesburg
+
+    volumes:
+      - ../config/jellyfin:/config
+      - /mnt/storage/media:/media
+
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    restart: unless-stopped
+
+    networks:
+      - homelab
+
+    ports:
+      - "4533:4533"
+
+    environment:
+      TZ: Africa/Johannesburg
+      ND_SCANINTERVAL: 1h
+      ND_LOGLEVEL: info
+
+    volumes:
+      - ../config/navidrome:/data
+      - /mnt/storage/media/Music:/music:ro
+
+networks:
+  homelab:
+    external: true
+
