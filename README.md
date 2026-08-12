@@ -1,101 +1,82 @@
-# Wandile's Home Lab
+# Wandile's Homelab
 
-A self-hosted Linux infrastructure lab built and maintained on a Lenovo G500 running Ubuntu Server.
+A self-hosted infrastructure lab built on a Lenovo G500 running Ubuntu Server.
 
-This project demonstrates practical experience with Linux system administration, Docker, containerised services, networking, storage management, monitoring, backups, troubleshooting, and infrastructure documentation.
+## Overview
+
+This project documents the design, deployment, operation and troubleshooting of a production-style home server environment.
 
 ## Infrastructure
 
-### Host
-- Lenovo G500
 - Ubuntu Server
-- Intel Core i3-3110M
-- 8 GB DDR3 RAM
-- SSD system storage
-- HDD bulk storage
-- Gigabit-capable networking infrastructure
-
-### Core Technologies
-
-- Linux / Ubuntu Server
-- Docker
+- Docker Engine
 - Docker Compose
-- Git
 - Tailscale
-- SSH
-- Caddy
-- PostgreSQL
-- Redis
+- Git
+- Linux administration
+- Persistent storage
+- Automated/service monitoring
 
-### Services
+## Services
 
-| Category | Services |
-|---|---|
-| Cloud | Nextcloud |
-| Media | Jellyfin, Navidrome |
-| Automation | Sonarr, Radarr, Lidarr |
-| Indexing | Prowlarr, FlareSolverr |
-| Downloads | qBittorrent |
-| Requests | Jellyseerr |
-| Management | Portainer, Homepage |
-| Monitoring | Prometheus, Grafana, cAdvisor, Node Exporter |
-| Testing | OpenSpeedTest |
+- Nextcloud
+- Jellyfin
+- Navidrome
+- Sonarr
+- Radarr
+- Lidarr
+- Prowlarr
+- qBittorrent
+- Jellyseerr
+- Portainer
+- Homepage
+- Prometheus
+- Grafana
+- cAdvisor
+- Node Exporter
+- OpenSpeedTest
 
-## Skills Demonstrated
+## Storage
 
-- Linux command-line administration
-- Filesystem and storage management
-- Docker container deployment
-- Docker Compose orchestration
-- Service configuration
-- Reverse proxy configuration
-- Network troubleshooting
-- DNS and Tailscale networking
-- Persistent Docker storage
-- PostgreSQL and Redis deployment
-- Monitoring and metrics
-- Backup planning
-- Incident troubleshooting
-- Git version control
-- Technical documentation
+The server uses separate storage for operating-system/application workloads and media/data storage.
+
+## Networking
+
+The server operates on the local LAN and is remotely accessible through Tailscale.
 
 ## Documentation
 
-Detailed documentation is available under:
+Professional documentation is available under:
 
-`professional/docs/`
+`professional/`
 
 Including:
 
 - Architecture
-- Docker
-- Hardware
-- Networking
+- Network design
 - Storage
-- Backups
-- Monitoring
+- Docker
 - Security
-- Services
+- Monitoring
+- Backups
 - Operations runbook
 - Troubleshooting
-- Job portfolio
+- Incident reports
 
-## Incident Reports
+## Project Goals
 
-Real infrastructure incidents are documented under:
+This lab is used to develop practical skills in:
 
-`professional/incidents/`
+- Linux system administration
+- Docker and containerisation
+- Networking
+- Storage administration
+- Monitoring
+- Backup and recovery
+- Troubleshooting
+- Infrastructure documentation
+- Git/version control
 
-These include:
+## Portfolio
 
-- G500 storage/boot incident
-- Music library rsync incident
-- Nextcloud encrypted storage incident
-
-## Project Goal
-
-The purpose of this lab is to build practical hands-on experience in Linux administration, networking, infrastructure, and self-hosted services while maintaining professional documentation suitable for an IT support, Linux administration, networking, or junior systems administration portfolio.
-
-## Status
-
-Active homelab — continuously maintained, tested, documented, and expanded.
+This homelab is maintained as a practical technical portfolio demonstrating hands-on infrastructure and IT support skills.
