@@ -40,26 +40,66 @@ docker --version
 docker compose version
 
 echo
+echo "=== CONTAINER HEALTH ==="
+
+RUNNING=0
+HEALTHY=0
+UNHEALTHY=0
+STARTING=0
+NO_HEALTHCHECK=0
+
+while read -r NAME STATUS; do
+
+    RUNNING=$((RUNNING + 1))
+
+    case "$STATUS" in
+        *healthy*)
+            HEALTHY=$((HEALTHY + 1))
+            ;;
+        *unhealthy*)
+            UNHEALTHY=$((UNHEALTHY + 1))
+            ;;
+        *starting*)
+            STARTING=$((STARTING + 1))
+            ;;
+        *)
+            NO_HEALTHCHECK=$((NO_HEALTHCHECK + 1))
+            ;;
+    esac
+
+done < <(
+    docker ps --format '{{.Names}}|{{.Status}}' |
+    while IFS='|' read -r NAME STATUS; do
+        echo "$NAME $STATUS"
+    done
+)
+
+echo "Running containers: $RUNNING"
+echo "Healthy:             $HEALTHY"
+echo "Unhealthy:           $UNHEALTHY"
+echo "Starting:            $STARTING"
+echo "No healthcheck:      $NO_HEALTHCHECK"
+
+echo
 echo "=== CONTAINERS ==="
 
-TOTAL_CONTAINERS=$(docker ps -q | wc -l)
+docker ps --format 'table {{.Names}}\t{{.Status}}'
 
-echo "Running containers: $TOTAL_CONTAINERS"
 echo
 
-docker ps \
-    --format 'table {{.Names}}\t{{.Status}}'
-
-if [ "$TOTAL_CONTAINERS" -eq 0 ]; then
-    echo
-    echo "[WARN] No containers are currently running"
+if [ "$UNHEALTHY" -gt 0 ]; then
+    echo "[WARN] One or more containers are unhealthy"
 else
-    echo
-    echo "[OK] Docker containers are running"
+    echo "[OK] No unhealthy containers detected"
+fi
+
+if [ "$STARTING" -gt 0 ]; then
+    echo "[INFO] One or more containers are still starting"
 fi
 
 echo
-echo "=== DOCKER VOLUMES ==="
+echo "=== DOCKER DISK USAGE ==="
+
 docker system df
 
 echo
@@ -92,12 +132,17 @@ echo "=== BACKUPS ==="
 BACKUP_DIR="/mnt/storage/backups"
 
 if [ -d "$BACKUP_DIR" ]; then
+
     BACKUP_SIZE=$(du -sh "$BACKUP_DIR" 2>/dev/null | awk '{print $1}')
+
     echo "Backup directory: $BACKUP_DIR"
     echo "Backup size: ${BACKUP_SIZE:-unknown}"
     echo "[OK] Backup directory exists"
+
 else
+
     echo "[WARN] Backup directory does not exist"
+
 fi
 
 echo
@@ -106,11 +151,15 @@ echo "=== GIT ==="
 GIT_STATUS=$(git -C ~/homelab status --short)
 
 if [ -z "$GIT_STATUS" ]; then
+
     echo "[OK] Git working tree clean"
+
 else
+
     echo "[WARN] Git working tree has changes"
     echo
     echo "$GIT_STATUS"
+
 fi
 
 echo
